@@ -6,13 +6,14 @@ namespace Idle
     public sealed class UIManager : MonoBehaviour
     {
         //enum
-        public enum ShopScreenType { Closed, CityScreen, ResidentsScreen, ComfortScreen, AutomationScreen }
+        public enum ShopScreenType { Closed, CityScreen, ResidentsScreen, ComfortScreen, AutomationScreen, AuditionScreen }
 
         [Header("Screens")]
         public GameObject CityScreen;
         public GameObject ResidentsScreen;
         public GameObject ComfortScreen;
         public GameObject AutomationScreen;
+        public GameObject AuditionScreen;
 
         [Header("Text")]
         public Text MoneyText;
@@ -32,8 +33,7 @@ namespace Idle
         {
             //Assign text
             MoneyText.text = IntParseToString(DataManager.data.Money);
-            MoneyPerSecondText.text = "+" + IntParseToString(DataManager.data.MoneyPerSecond) + " /s";
-
+            MoneyPerSecondText.text = "+" + IntParseToString(DataManager.data.MoneyPerSecond) + "/s";
 
             //Update upgrades UI
             Managers.Instance.upgradeManager.UpdateUI();
@@ -89,6 +89,9 @@ namespace Idle
                 case "AutomationScreen":
                     ChangeShopScreen(ShopScreenType.AutomationScreen);
                     break;
+                case "AuditionScreen":
+                    ChangeShopScreen(ShopScreenType.AuditionScreen);
+                    break;
             }
 
         }
@@ -98,10 +101,10 @@ namespace Idle
             //If shopScreenType is equal to the same Screen that we ship, the store will be closed
             if (shopScreenType == this.shopScreenType)
             {
-                //Calling a method to play an animation from AnimatorManager, by calling Singleton, store collapse animation
-                Managers.Instance.animatorManager.PlayAnimation(Managers.Instance.animatorManager.shopAnimator, "ShopHide");
-                //set the class variable shopScreenType to closed
-                this.shopScreenType = ShopScreenType.Closed;
+               //Calling a method to play an animation from AnimatorManager, by calling Singleton, store collapse animation
+               Managers.Instance.animatorManager.PlayAnimation(Managers.Instance.animatorManager.shopAnimator, "ShopHide");
+               //set the class variable shopScreenType to closed
+               this.shopScreenType = ShopScreenType.Closed;
             }
             else
             {
@@ -127,6 +130,10 @@ namespace Idle
                         this.shopScreenType = shopScreenType;
                         AutomationScreen.SetActive(true);
                         break;
+                    case ShopScreenType.AuditionScreen:
+                        this.shopScreenType = shopScreenType;
+                        AuditionScreen.SetActive(true);
+                        break;
                 }
 
                 //Store open animation
@@ -142,6 +149,7 @@ namespace Idle
             ResidentsScreen.SetActive(false);
             ComfortScreen.SetActive(false);
             AutomationScreen.SetActive(false);
+            AuditionScreen.SetActive(false);
         }
         #endregion
         #region//Screens
